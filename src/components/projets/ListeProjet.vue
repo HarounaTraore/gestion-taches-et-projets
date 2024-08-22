@@ -1,38 +1,36 @@
 <template>
   <div class="container mt-5">
-    <h2 class="text-center mb-4">Liste des Livres</h2>
+    <h2 class="text-center mb-4">Liste de projets</h2>
     <table class="table table-hover">
       <thead class="table-dark">
         <tr>
-          <th>Titre</th>
-          <th>Auteur</th>
+          <th>Nom</th>
           <th class="text-center">Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="livre in livres" :key="livre.id">
-          <td>{{ livre.titre }}</td>
-          <td>{{ livre.auteur }}</td>
+        <tr v-for="(projet, index) in strores.projects" :key="index">
+          <td>{{ projet.nom }}</td>
           <td class="text-center">
             <button
               class="btn btn-info btn-sm me-2"
-              @click="voirDetails(livre)"
+              @click="strores.getProjet(projet)"
               data-bs-toggle="modal"
-              data-bs-target="#voirLivreModal"
+              data-bs-target="#voirMembreModal"
             >
               <i class="fas fa-eye"></i>
             </button>
             <button
               class="btn btn-warning btn-sm me-2"
-              @click="ouvrirEdition(livre)"
+              @click="ouvrirEdition(membre)"
               data-bs-toggle="modal"
-              data-bs-target="#editerLivreModal"
+              data-bs-target="#editerMembreModal"
             >
               <i class="fas fa-edit"></i>
             </button>
             <button
               class="btn btn-danger btn-sm"
-              @click="supprimerLivre(livre.id)"
+              @click="strores.removeProject(index)"
             >
               <i class="fas fa-trash"></i>
             </button>
@@ -41,21 +39,24 @@
       </tbody>
     </table>
 
-    <AjouterLivre @livre-ajoute="ajouterLivreAListe" />
+    <button type="button" class="btn btn-primary mt-4">
+      <RouterLink class="nav-link" to="/projet/ajouter"
+        >Ajouter un nouveau projet</RouterLink
+      >
+    </button>
 
-    <!-- Modal pour voir les détails d'un livre -->
     <div
       class="modal fade"
-      id="voirLivreModal"
+      id="voirMembreModal"
       tabindex="-1"
-      aria-labelledby="voirLivreModalTitle"
+      aria-labelledby="voirMembreModalTitle"
       aria-hidden="true"
     >
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="voirLivreModalTitle">
-              Détails du Livre
+            <h5 class="modal-title" id="voirMembreModalTitle">
+              Détails du Membre
             </h5>
             <button
               type="button"
@@ -65,29 +66,10 @@
             ></button>
           </div>
           <div class="modal-body">
-            <p><strong>Id:</strong> {{ livreSelectionne?.id }}</p>
-            <p><strong>Titre:</strong> {{ livreSelectionne?.titre }}</p>
-            <p><strong>Auteur:</strong> {{ livreSelectionne?.auteur }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal pour éditer un livre -->
-    <div
-      class="modal fade"
-      id="editerLivreModal"
-      tabindex="-1"
-      aria-labelledby="editerLivreModalTitle"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-body">
-            <ModifierLivre
-              :livre="livreAEditer"
-              @livre-modifie="mettreAJourLivre"
-            />
+            <p><strong>Id:</strong> {{ strores.project.id }}</p>
+            <p><strong>Nom:</strong> {{ strores.project.nom }}</p>
+            <p><strong>Date Debut:</strong> {{ strores.project.dateDebut }}</p>
+            <p><strong>Date Fin:</strong> {{ strores.project.dateFin }}</p>
           </div>
         </div>
       </div>
@@ -95,74 +77,9 @@
   </div>
 </template>
 
+
 <script setup>
-import { ref } from "vue";
-import AjouterLivre from "./AjouterProjet.vue";
-import ModifierLivre from "./ModifierProjet.vue";
-
-const livres = ref([
-  { id: 1, titre: "Livre 1", auteur: "Auteur 1" },
-  { id: 2, titre: "Livre 2", auteur: "Auteur 2" },
-]);
-
-const livreSelectionne = ref(null);
-const livreAEditer = ref(null);
-
-const voirDetails = (livre) => {
-  livreSelectionne.value = livre;
-};
-
-const ouvrirEdition = (livre) => {
-  livreAEditer.value = { ...livre }; // Passer une copie du livre pour l'édition
-};
-
-const supprimerLivre = (id) => {
-  livres.value = livres.value.filter((livre) => livre.id !== id);
-};
-
-const ajouterLivreAListe = (nouveauLivre) => {
-  if (nouveauLivre.auteur && nouveauLivre.titre) {
-    nouveauLivre.id = livres.value.length + 1;
-    livres.value.push(nouveauLivre);
-  }
-};
-
-const mettreAJourLivre = (livreModifie) => {
-  const index = livres.value.findIndex((livre) => livre.id === livreModifie.id);
-  if (index !== -1) {
-    livres.value[index] = { ...livreModifie };
-  }
-  livreAEditer.value = null;
-  // Fermer le modal
-  const modal = new bootstrap.Modal(
-    document.getElementById("editerLivreModal")
-  );
-  modal.hide();
-};
+import { useGestionStore } from "@/stores/gestion";
+const strores = useGestionStore();
 </script>
 
-<style scoped>
-h2 {
-  color: #495057;
-}
-
-.table-hover tbody tr:hover {
-  background-color: #f1f1f1;
-}
-
-.btn {
-  font-size: 0.875rem;
-}
-
-.modal-content {
-  border-radius: 0.5rem;
-}
-
-.modal-header {
-  background-color: #f8f9fa;
-}
-
-.modal-title {
-  color: #343a40;
-}
-</style>
