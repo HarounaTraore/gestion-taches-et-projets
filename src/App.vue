@@ -24,10 +24,10 @@ import { RouterLink, RouterView } from "vue-router";
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item me-3">
-              <RouterLink class="nav-link" to="/tache">Taches</RouterLink>
+              <RouterLink class="nav-link fw-bold" to="/tache">Taches</RouterLink>
             </li>
             <li class="nav-item me-3">
-              <RouterLink class="nav-link" to="/projet">Projets</RouterLink>
+              <RouterLink class="nav-link fw-bold" to="/projet">Projets</RouterLink>
             </li>
           </ul>
         </div>

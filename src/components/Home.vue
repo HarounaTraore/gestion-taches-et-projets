@@ -1,6 +1,6 @@
 <template>
     <div class="text-center mt-4">
-        <h1>Gestion des tâches et des projets</h1>
+        <h1 class="fw-bold">Gestion des tâches et des projets</h1>
         <p class="lead"></p>
       </div>
     <div class="text-center ">

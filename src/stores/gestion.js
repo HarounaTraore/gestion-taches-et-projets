@@ -1,8 +1,16 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
-export const useGestionStore = defineStore("counter", () => {
-  const project = ref("");
+export const useGestionStore = defineStore("gestion", () => {
+  const route = useRouter();
+  const project = ref({
+    id: 0,
+    nom: "",
+    dateDebut: "",
+    dateFin: "",
+  });
+
   const projects = ref([
     {
       id: 1,
@@ -24,25 +32,32 @@ export const useGestionStore = defineStore("counter", () => {
     },
   ]);
 
-  const getProjet = (index) => {
+  const getProject = (index) => {
     project.value = index;
   };
 
   const removeProject = (index) => {
-    console.log(index);
     projects.value.splice(index, 1);
+
   };
 
-  const addProject = (newProject) => {
-    newProject.id == projects.value.length + 1;
-    projects.value.push(newProject);
+  const addProject = (obj) => {
+    projects.value.push(obj);
+    route.push("/projet");
   };
-
+  const editProject = (obj) => {
+    const index = obj.id -1
+    projects.value[index].nom = obj.nom
+    projects.value[index].dateDebut = obj.dateDebut
+    projects.value[index].dateFin = obj.dateFin
+    route.push("/projet");
+  };
   return {
     projects,
     project,
-    getProjet,
+    getProject,
     removeProject,
-    addProject
+    addProject,
+    editProject,
   };
 });
