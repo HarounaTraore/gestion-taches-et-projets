@@ -44,7 +44,7 @@
         />
       </div>
       <div class="mb-3">
-        <select for="projet" class="form-label" v-model="store.tache.projet">
+        <select for="projet" class="form-label" v-model="store.tache.projet" required>
           <option
             v-for="(projet, index) in store.projects"
             :key="index"
@@ -62,7 +62,6 @@
 
 <script setup>
 import { useGestionStore } from "@/stores/gestion";
-// import { useRoute, useRouter } from "vue-router";
 
 const store = useGestionStore();
 

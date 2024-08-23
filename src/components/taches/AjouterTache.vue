@@ -54,7 +54,7 @@
           >
             {{ projet.nom }}
           </option>
-          <option selected>Choisir le projet</option>
+          <option value="" selected>Choisir le projet</option>
         </select>
       </div>
       <button type="submit" class="btn btn-primary w-25">Ajouter</button>
