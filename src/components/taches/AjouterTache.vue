@@ -1,24 +1,55 @@
+<!-- 
+
 <template>
   <div>
-    <h3>Ajouter un nouveau Membre</h3>
-    <form @submit.prevent="ajouterMembre">
+    <h3>Ajouter une nouvelle Tâche</h3>
+    <form @submit.prevent="ajouterTache">
       <div class="mb-3">
         <label for="nom" class="form-label">Nom</label>
         <input
           type="text"
           class="form-control"
           id="nom"
-          v-model="nouveauMembre.nom"
+          v-model="nouvelleTache.nom"
           required
         />
       </div>
       <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input
-          type="email"
+        <label for="description" class="form-label">Description</label>
+        <textarea
           class="form-control"
-          id="email"
-          v-model="nouveauMembre.email"
+          id="description"
+          v-model="nouvelleTache.description"
+          required
+        ></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="dateDebut" class="form-label">Date de début</label>
+        <input
+          type="date"
+          class="form-control"
+          id="dateDebut"
+          v-model="nouvelleTache.dateDebut"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="dateFin" class="form-label">Date de fin</label>
+        <input
+          type="date"
+          class="form-control"
+          id="dateFin"
+          v-model="nouvelleTache.dateFin"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="projet" class="form-label">Projet</label>
+        <input
+          type="text"
+          class="form-control"
+          id="projet"
+          v-model="nouvelleTache.projet"
           required
         />
       </div>
@@ -28,27 +59,121 @@
 </template>
 
 <script setup>
-import { ref, defineEmits } from "vue";
+import { ref } from "vue";
+import { useGestionStore } from "@/stores/gestion";
 
-const emit = defineEmits(["membre-ajoute"]);
+const store = useGestionStore();
 
-const nouveauMembre = ref({
+const nouvelleTache = ref({
   nom: "",
-  email: "",
+  description: "",
+  dateDebut: "",
+  dateFin: "",
+  projet: "",
 });
 
-const ajouterMembre = () => {
-  const membre = {
-    ...nouveauMembre.value,
-  };
+const ajouterTache = () => {
+  store.addTache({ ...nouvelleTache.value });
 
-  emit("membre-ajoute", membre);
-
-  nouveauMembre.value = {
+  nouvelleTache.value = {
     nom: "",
-    email: "",
+    description: "",
+    dateDebut: "",
+    dateFin: "",
+    projet: "",
+  };
+};
+</script>
+ -->
+
+ <template>
+  <div>
+    <h3 class="text-center fw-bold mt-4">Ajouter une nouvelle Tâche</h3>
+    <form @submit.prevent="ajouterTache">
+      <div class="mb-3">
+        <label for="nom" class="form-label">Nom</label>
+        <input
+          type="text"
+          class="form-control"
+          id="nom"
+          placeholder="Entrer le nom de la tâche"
+          v-model="nouvelleTache.nom"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea
+          class="form-control"
+          id="description"
+          placeholder="Entrer la description de la tâche"
+          v-model="nouvelleTache.description"
+          required
+        ></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="dateDebut" class="form-label">Date de début</label>
+        <input
+          type="date"
+          class="form-control"
+          id="dateDebut"
+          v-model="nouvelleTache.dateDebut"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="dateFin" class="form-label">Date de fin</label>
+        <input
+          type="date"
+          class="form-control"
+          id="dateFin"
+          v-model="nouvelleTache.dateFin"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="projet" class="form-label">Projet</label>
+        <input
+          type="text"
+          class="form-control"
+          id="projet"
+          placeholder="Entrer le nom du projet associé"
+          v-model="nouvelleTache.projet"
+          required
+        />
+      </div>
+      <button type="submit" class="btn btn-primary w-25">Ajouter</button>
+    </form>
+  </div>
+</template>
+
+<script setup>
+import { ref } from "vue";
+import { useGestionStore } from "@/stores/gestion";
+
+const store = useGestionStore();
+
+const nouvelleTache = ref({
+  nom: "",
+  description: "",
+  dateDebut: "",
+  dateFin: "",
+  projet: "",
+});
+
+const ajouterTache = () => {
+  store.addTache({ ...nouvelleTache.value });
+
+  nouvelleTache.value = {
+    nom: "",
+    description: "",
+    dateDebut: "",
+    dateFin: "",
+    projet: "",
   };
 };
 </script>
 
+<style scoped>
 
+</style>

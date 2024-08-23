@@ -1,56 +1,81 @@
 <template>
-  <div v-if="membre">
-    <form @submit.prevent="modifierMembre">
+  <div v-if="tache">
+    <h3 class="text-center fw-bold mt-4">Modifier la Tâche</h3>
+    <form @submit.prevent="modifierTache">
       <div class="mb-3">
         <label for="nom" class="form-label">Nom</label>
         <input
           type="text"
           id="nom"
-          v-model="membreModifie.nom"
+          v-model="tacheModifiee.nom"
+          class="form-control"
+          placeholder="Entrer le nom de la tâche"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea
+          id="description"
+          v-model="tacheModifiee.description"
+          class="form-control"
+          placeholder="Entrer la description de la tâche"
+          required
+        ></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="dateDebut" class="form-label">Date de début</label>
+        <input
+          type="date"
+          id="dateDebut"
+          v-model="tacheModifiee.dateDebut"
           class="form-control"
           required
         />
       </div>
       <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
+        <label for="dateFin" class="form-label">Date de fin</label>
         <input
-          type="email"
-          id="email"
-          v-model="membreModifie.email"
+          type="date"
+          id="dateFin"
+          v-model="tacheModifiee.dateFin"
           class="form-control"
           required
         />
       </div>
-      <button type="submit" class="btn btn-primary">
-        Enregistrer les modifications
-      </button>
+      <div class="mb-3">
+        <label for="projet" class="form-label">Projet</label>
+        <input
+          type="text"
+          id="projet"
+          v-model="tacheModifiee.projet"
+          class="form-control"
+          placeholder="Entrer le nom du projet associé"
+          required
+        />
+      </div>
+      <button type="submit" class="btn btn-primary w-25">Enregistrer</button>
     </form>
   </div>
 </template>
 
 <script setup>
-import { ref, watch, defineProps, defineEmits } from "vue";
+import { ref } from "vue";
+import { useGestionStore } from "@/stores/gestion";
+import { useRoute, useRouter } from "vue-router";
 
-const props = defineProps({
-  membre: Object,
-});
+const store = useGestionStore();
+const route = useRoute();
+const router = useRouter();
 
-const membreModifie = ref({ ...props.membre });
+const tache = store.tache;
+const tacheModifiee = ref({ ...tache.value });
 
-const emit = defineEmits(["membre-modifie"]);
-
-watch(
-  () => props.membre,
-  (nouveauMembre) => {
-    membreModifie.value = { ...nouveauMembre };
-  }
-);
-
-const modifierMembre = () => {
-  emit("membre-modifie", { ...membreModifie.value });
+const modifierTache = () => {
+  store.editTache(tacheModifiee.value);
+  router.push('/tache'); 
 };
 </script>
 
 <style scoped>
-/* Ajoutez des styles si nécessaire */
 </style>

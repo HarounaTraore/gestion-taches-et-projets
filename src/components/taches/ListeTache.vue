@@ -1,36 +1,38 @@
 <template>
   <div class="container mt-5">
-    <h2 class="text-center mb-4">Liste des membres</h2>
+    <h2 class="text-center mb-4">Liste des Tâches</h2>
     <table class="table table-hover">
       <thead class="table-dark">
         <tr>
           <th>Nom</th>
+          <th>Projet</th>
           <th class="text-center">Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="membre in membres" :key="membre.id">
-          <td>{{ membre.nom }}</td>
+        <tr v-for="(tache, index) in taches" :key="index">
+          <td>{{ tache.nom }}</td>
+          <td>{{ tache.projet }}</td>
           <td class="text-center">
             <button
               class="btn btn-info btn-sm me-2"
-              @click="voirDetails(membre)"
+              @click="store.getTache(tache)"
               data-bs-toggle="modal"
-              data-bs-target="#voirMembreModal"
+              data-bs-target="#voirTacheModal"
             >
               <i class="fas fa-eye"></i>
             </button>
             <button
               class="btn btn-warning btn-sm me-2"
-              @click="ouvrirEdition(membre)"
-              data-bs-toggle="modal"
-              data-bs-target="#editerMembreModal"
+              @click="store.getTache(tache)"
             >
-              <i class="fas fa-edit"></i>
+              <RouterLink to="/tache/modifier">
+                <i class="fas fa-edit"></i>
+              </RouterLink>
             </button>
             <button
               class="btn btn-danger btn-sm"
-              @click="supprimerMembre(membre.id)"
+              @click="store.removeTache(index)"
             >
               <i class="fas fa-trash"></i>
             </button>
@@ -39,28 +41,22 @@
       </tbody>
     </table>
 
-    <button
-      type="button"
-      class="btn btn-primary mt-4"
-      data-bs-toggle="modal"
-      data-bs-target="#ajoutMembreModal"
-    >
-      Ajouter un membre
-    </button>
+    <RouterLink class="btn btn-primary mt-4" to="/tache/ajouter">
+      Ajouter une Tâche
+    </RouterLink>
 
+    <!-- Modal pour afficher les détails de la tâche -->
     <div
       class="modal fade"
-      id="ajoutMembreModal"
+      id="voirTacheModal"
       tabindex="-1"
-      aria-labelledby="ajoutMembreModalTitle"
+      aria-labelledby="voirTacheModalTitle"
       aria-hidden="true"
     >
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="ajoutMembreModalTitle">
-              Modifier les informations du membre
-            </h5>
+            <h5 class="modal-title" id="voirTacheModalTitle">Détails de la Tâche</h5>
             <button
               type="button"
               class="btn-close"
@@ -69,67 +65,11 @@
             ></button>
           </div>
           <div class="modal-body">
-            <AjouterMembre @membre-ajoute="ajouterMembreAListe" />
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div
-      class="modal fade"
-      id="editerMembreModal"
-      tabindex="-1"
-      aria-labelledby="editerMembreModalTitle"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="editerMembreModalTitle">
-              Modifier le Membre
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <ModifierMembre
-              v-if="membreAEditer"
-              :membre="membreAEditer"
-              @membre-modifie="mettreAJourMembre"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div
-      class="modal fade"
-      id="voirMembreModal"
-      tabindex="-1"
-      aria-labelledby="voirMembreModalTitle"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="voirMembreModalTitle">
-              Détails du Membre
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <p><strong>Id:</strong> {{ membreSelectionne?.id }}</p>
-            <p><strong>Nom:</strong> {{ membreSelectionne?.nom }}</p>
-            <p><strong>Email:</strong> {{ membreSelectionne?.email }}</p>
+            <p><strong>Id:</strong> {{ store.tache.id }}</p>
+            <p><strong>Nom:</strong> {{ store.tache.nom }}</p>
+            <p><strong>Projet:</strong> {{ store.tache.projet }}</p>
+            <p><strong>Date Debut:</strong> {{ store.tache.dateDebut }}</p>
+            <p><strong>Date Fin:</strong> {{ store.tache.dateFin }}</p>
           </div>
         </div>
       </div>
@@ -138,68 +78,15 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import AjouterMembre from "./AjouterTache.vue";
-import ModifierMembre from "./ModifierTache.vue";
+import { useGestionStore } from "@/stores/gestion";
+import { RouterLink } from "vue-router";
 
-const membres = ref([
-  { id: 1, nom: "Membre 1", email: "email1@example.com" },
-  { id: 2, nom: "Membre 2", email: "email2@example.com" },
-  { id: 3, nom: "Membre 3", email: "email3@example.com" },
-]);
-
-const membreSelectionne = ref(null);
-const membreAEditer = ref(null);
-
-const voirDetails = (membre) => {
-  membreSelectionne.value = membre;
-};
-
-const ouvrirEdition = (membre) => {
-  membreAEditer.value = { ...membre };
-};
-
-const supprimerMembre = (id) => {
-  membres.value = membres.value.filter((membre) => membre.id !== id);
-};
-
-const ajouterMembreAListe = (nouveauMembre) => {
-  nouveauMembre.id = membres.value.length + 1;
-  membres.value.push(nouveauMembre);
-};
-
-const mettreAJourMembre = (membreModifie) => {
-  const index = membres.value.findIndex(
-    (membre) => membre.id === membreModifie.id
-  );
-  if (index !== -1) {
-    membres.value[index] = { ...membreModifie };
-  }
-};
+const store = useGestionStore();
+const taches = store.taches;
 </script>
 
 <style scoped>
-h2 {
-  color: #495057;
-}
-
-.table-hover tbody tr:hover {
-  background-color: #f1f1f1;
-}
-
-.btn {
-  font-size: 0.875rem;
-}
-
-.modal-content {
-  border-radius: 0.5rem;
-}
-
-.modal-header {
-  background-color: #f8f9fa;
-}
-
-.modal-title {
-  color: #343a40;
+i {
+  font-size: 12px;
 }
 </style>
