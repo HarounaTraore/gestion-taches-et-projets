@@ -1,7 +1,7 @@
 <template>
   <div v-if="tache">
     <h3 class="text-center fw-bold mt-4">Modifier la Tâche</h3>
-    <form @submit.prevent="modifierTache">
+    <form @submit.prevent="store.editTache(store.tache)">
       <div class="mb-3">
         <label for="nom" class="form-label">Nom</label>
         <input

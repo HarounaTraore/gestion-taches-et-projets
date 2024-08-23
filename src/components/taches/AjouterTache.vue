@@ -1,95 +1,9 @@
-<!-- 
 
-<template>
-  <div>
-    <h3>Ajouter une nouvelle Tâche</h3>
-    <form @submit.prevent="ajouterTache">
-      <div class="mb-3">
-        <label for="nom" class="form-label">Nom</label>
-        <input
-          type="text"
-          class="form-control"
-          id="nom"
-          v-model="nouvelleTache.nom"
-          required
-        />
-      </div>
-      <div class="mb-3">
-        <label for="description" class="form-label">Description</label>
-        <textarea
-          class="form-control"
-          id="description"
-          v-model="nouvelleTache.description"
-          required
-        ></textarea>
-      </div>
-      <div class="mb-3">
-        <label for="dateDebut" class="form-label">Date de début</label>
-        <input
-          type="date"
-          class="form-control"
-          id="dateDebut"
-          v-model="nouvelleTache.dateDebut"
-          required
-        />
-      </div>
-      <div class="mb-3">
-        <label for="dateFin" class="form-label">Date de fin</label>
-        <input
-          type="date"
-          class="form-control"
-          id="dateFin"
-          v-model="nouvelleTache.dateFin"
-          required
-        />
-      </div>
-      <div class="mb-3">
-        <label for="projet" class="form-label">Projet</label>
-        <input
-          type="text"
-          class="form-control"
-          id="projet"
-          v-model="nouvelleTache.projet"
-          required
-        />
-      </div>
-      <button type="submit" class="btn btn-primary">Ajouter</button>
-    </form>
-  </div>
-</template>
-
-<script setup>
-import { ref } from "vue";
-import { useGestionStore } from "@/stores/gestion";
-
-const store = useGestionStore();
-
-const nouvelleTache = ref({
-  nom: "",
-  description: "",
-  dateDebut: "",
-  dateFin: "",
-  projet: "",
-});
-
-const ajouterTache = () => {
-  store.addTache({ ...nouvelleTache.value });
-
-  nouvelleTache.value = {
-    nom: "",
-    description: "",
-    dateDebut: "",
-    dateFin: "",
-    projet: "",
-  };
-};
-</script>
- -->
 
  <template>
   <div>
     <h3 class="text-center fw-bold mt-4">Ajouter une nouvelle Tâche</h3>
-    <form @submit.prevent="ajouterTache">
+    <form @submit.prevent="store.addTache(nouvelleTache)">
       <div class="mb-3">
         <label for="nom" class="form-label">Nom</label>
         <input
