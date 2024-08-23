@@ -46,7 +46,16 @@
         />
       </div>
       <div class="mb-3">
-        <select for="projet" class="form-label" ><option v-for="projet, index in store.projects" :key="index" :value="projet.nom">{{ projet.nom }}</option></select>
+        <select for="projet" class="form-label" v-model="nouvelleTache.projet">
+          <option
+            v-for="(projet, index) in store.projects"
+            :key="index"
+            :value="projet.nom"
+          >
+            {{ projet.nom }}
+          </option>
+          <option selected>Choisir le projet</option>
+        </select>
       </div>
       <button type="submit" class="btn btn-primary w-25">Ajouter</button>
     </form>
@@ -56,7 +65,6 @@
 <script setup>
 import { ref } from "vue";
 import { useGestionStore } from "@/stores/gestion";
-
 
 const store = useGestionStore();
 
@@ -82,5 +90,4 @@ const ajouterTache = () => {
 </script>
 
 <style scoped>
-
 </style>

@@ -44,7 +44,16 @@
         />
       </div>
       <div class="mb-3">
-        <select for="projet" class="form-label" ><option v-for="projet, index in store.projects" :key="index" :value="projet.nom" selected="s">{{ projet.nom }}</option></select>
+        <select for="projet" class="form-label" v-model="store.tache.projet">
+          <option
+            v-for="(projet, index) in store.projects"
+            :key="index"
+            :value="projet.nom"
+          >
+            {{ projet.nom }}
+          </option>
+          <option :value="store.tache.projet" selected>{{ store.tache.projet }}</option>
+        </select>
       </div>
       <button type="submit" class="btn btn-primary w-25">Enregistrer</button>
     </form>
@@ -53,12 +62,11 @@
 
 <script setup>
 import { useGestionStore } from "@/stores/gestion";
-import { useRoute, useRouter } from "vue-router";
+// import { useRoute, useRouter } from "vue-router";
 
 const store = useGestionStore();
 
 const tache = store.tache;
-
 </script>
 
 <style scoped>
