@@ -46,15 +46,7 @@
         />
       </div>
       <div class="mb-3">
-        <label for="projet" class="form-label">Projet</label>
-        <input
-          type="text"
-          class="form-control"
-          id="projet"
-          placeholder="Entrer le nom du projet associé"
-          v-model="nouvelleTache.projet"
-          required
-        />
+        <select for="projet" class="form-label" ><option v-for="projet, index in store.projects" :key="index" :value="projet.nom">{{ projet.nom }}</option></select>
       </div>
       <button type="submit" class="btn btn-primary w-25">Ajouter</button>
     </form>
@@ -64,6 +56,7 @@
 <script setup>
 import { ref } from "vue";
 import { useGestionStore } from "@/stores/gestion";
+
 
 const store = useGestionStore();
 

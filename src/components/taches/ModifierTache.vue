@@ -7,7 +7,7 @@
         <input
           type="text"
           id="nom"
-          v-model="tacheModifiee.nom"
+          v-model="store.tache.nom"
           class="form-control"
           placeholder="Entrer le nom de la tâche"
           required
@@ -17,7 +17,7 @@
         <label for="description" class="form-label">Description</label>
         <textarea
           id="description"
-          v-model="tacheModifiee.description"
+          v-model="store.tache.description"
           class="form-control"
           placeholder="Entrer la description de la tâche"
           required
@@ -28,7 +28,7 @@
         <input
           type="date"
           id="dateDebut"
-          v-model="tacheModifiee.dateDebut"
+          v-model="store.tache.dateDebut"
           class="form-control"
           required
         />
@@ -38,21 +38,13 @@
         <input
           type="date"
           id="dateFin"
-          v-model="tacheModifiee.dateFin"
+          v-model="store.tache.dateFin"
           class="form-control"
           required
         />
       </div>
       <div class="mb-3">
-        <label for="projet" class="form-label">Projet</label>
-        <input
-          type="text"
-          id="projet"
-          v-model="tacheModifiee.projet"
-          class="form-control"
-          placeholder="Entrer le nom du projet associé"
-          required
-        />
+        <select for="projet" class="form-label" ><option v-for="projet, index in store.projects" :key="index" :value="projet.nom" selected="s">{{ projet.nom }}</option></select>
       </div>
       <button type="submit" class="btn btn-primary w-25">Enregistrer</button>
     </form>
@@ -60,21 +52,13 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
 import { useGestionStore } from "@/stores/gestion";
 import { useRoute, useRouter } from "vue-router";
 
 const store = useGestionStore();
-const route = useRoute();
-const router = useRouter();
 
 const tache = store.tache;
-const tacheModifiee = ref({ ...tache.value });
 
-const modifierTache = () => {
-  store.editTache(tacheModifiee.value);
-  router.push('/tache'); 
-};
 </script>
 
 <style scoped>
