@@ -21,6 +21,25 @@ const router = createRouter({
       path: "/projet",
       component: ListeProjet,
     },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     {
       path: "/projet/ajouter",
       component: AjouterProjet,
